@@ -1,0 +1,171 @@
+@startuml
+title Scénario 4 : Assigner un Livreur
+
+autonumber
+
+actor "Gérant" as Gerant
+
+boundary "LivraisonView" as View
+control "LivraisonController" as Controller
+control "LivraisonValidator" as Validator
+control "LivraisonService" as Service
+
+entity "CommandeModel" as CommandeModel
+entity "LivreurModel" as LivreurModel
+entity "NotificationModel" as NotificationModel
+
+Gerant -> View : Choisir une commande prête
+
+View -> Controller : assignerLivreur(idCommande)
+
+Controller -> Validator : validateAssignation(idCommande)
+
+activate Validator
+
+Validator -> Validator : required(idCommande)
+
+alt Identifiant vide
+
+Validator --> Controller : errors[]
+
+Controller -> View : afficherErreurs(errors)
+
+else Identifiant valide
+
+Validator -> CommandeModel : existsCommande(idCommande)
+
+alt Commande inexistante
+
+CommandeModel --> Validator : false
+
+Validator --> Controller : errors["commande"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Commande trouvée
+
+CommandeModel --> Validator : Commande
+
+Validator -> CommandeModel : verifierEtat(idCommande)
+
+alt Etat différent de PRETE
+
+CommandeModel --> Validator : Etat invalide
+
+Validator --> Controller : errors["etat"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Etat = PRETE
+
+CommandeModel --> Validator : OK
+
+Validator --> Controller : Validation OK
+
+end
+
+end
+
+end
+
+deactivate Validator
+
+Controller -> Service : getLivreursDisponibles()
+
+activate Service
+
+Service -> LivreurModel : findDisponibles()
+
+LivreurModel --> Service : ListeLivreurs
+
+Service --> Controller : ListeLivreurs
+
+deactivate Service
+
+Controller --> View : afficherLivreurs()
+
+Gerant -> View : Choisir un livreur
+
+View -> Controller : confirmerAssignation(idCommande,idLivreur)
+
+Controller -> Validator : validateLivreur(idLivreur)
+
+activate Validator
+
+Validator -> Validator : required(idLivreur)
+
+alt Livreur non renseigné
+
+Validator --> Controller : errors[]
+
+Controller -> View : afficherErreurs(errors)
+
+else Livreur renseigné
+
+Validator -> LivreurModel : existsLivreur(idLivreur)
+
+alt Livreur inexistant
+
+LivreurModel --> Validator : false
+
+Validator --> Controller : errors["livreur"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Livreur trouvé
+
+LivreurModel --> Validator : Livreur
+
+Validator -> LivreurModel : verifierDisponibilite(idLivreur)
+
+alt Livreur occupé
+
+LivreurModel --> Validator : OCCUPE
+
+Validator --> Controller : errors["disponibilite"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Livreur disponible
+
+LivreurModel --> Validator : DISPONIBLE
+
+Validator --> Controller : Validation OK
+
+end
+
+end
+
+end
+
+deactivate Validator
+
+Controller -> Service : assignerLivreur(idCommande,idLivreur)
+
+activate Service
+
+Service -> CommandeModel : affecterLivreur()
+
+CommandeModel --> Service : OK
+
+Service -> CommandeModel : modifierEtat(EN_LIVRAISON)
+
+CommandeModel --> Service : OK
+
+Service -> LivreurModel : modifierEtat(OCCUPE)
+
+LivreurModel --> Service : OK
+
+Service -> NotificationModel : notifierLivreur()
+
+NotificationModel --> Service : Notification créée
+
+Service --> Controller : Assignation réussie
+
+deactivate Service
+
+Controller -> View : afficherConfirmation()
+
+View --> Gerant : Livreur assigné
+
+@enduml

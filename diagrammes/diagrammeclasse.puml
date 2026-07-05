@@ -1,0 +1,87 @@
+@startuml
+
+left to right direction
+skinparam dpi 180
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+
+title Diagramme de Classes d'Analyse - Gestion FastFood
+
+class Client{
+    id
+    nomPrenom
+    telephone
+    adresse
+}
+
+class Gerant{
+    id
+    nomPrenom
+    login
+    password
+}
+
+class Livreur{
+    id
+    nomPrenom
+    telephone
+    etat
+}
+
+class Produit{
+    reference
+    libelle
+    description
+    prix
+    quantiteStock
+}
+
+class Commande{
+    reference
+    date
+    montant
+    etat
+}
+
+class LigneCommande{
+    quantite
+    prixUnitaire
+}
+
+class Paiement{
+    reference
+    date
+    montant
+    modePaiement
+    statut
+}
+
+class Notification{
+    id
+    date
+    message
+    type
+}
+
+Client "1" -- "0..*" Commande : passe >
+
+Commande "1" *-- "1..*" LigneCommande
+
+Produit "1" -- "0..*" LigneCommande : concerne >
+
+Commande "0..1" -- "1" Paiement : est payée par >
+
+Gerant "1" -- "0..*" Produit : gère >
+
+Gerant "1" -- "0..*" Commande : valide >
+
+Livreur "1" -- "0..*" Commande : livre >
+
+Commande "0..*" --> "0..*" Notification : génère >
+
+Client "1" <-- "0..*" Notification
+
+Livreur "1" <-- "0..*" Notification
+
+@enduml
