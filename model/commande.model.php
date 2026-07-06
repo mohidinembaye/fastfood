@@ -52,3 +52,13 @@ function modifierEtat($idCommande, $nouvelEtat) {
     }
     return "Commande introuvable";
 }
+function findByEtat($etat) {
+    global $commandes;
+    $resultats = [];
+    foreach ($commandes as $commande) {
+        if ($commande['statut'] === $etat) {
+            $resultats[] = $commande;
+        }
+    }
+    return $resultats;
+}

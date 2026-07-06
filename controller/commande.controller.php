@@ -14,3 +14,8 @@ function traiterSaveCommande() {
     $commandeEnregistree = saveCommande($donnees);
     afficherConfirmationCommande($commandeEnregistree['reference'], $commandeEnregistree['montant']);
 }
+function traiterListerCommandesPayees() {
+    $liste = getCommandesPayees();
+    afficherListeCommandesPayees($liste);
+    return $liste;
+}

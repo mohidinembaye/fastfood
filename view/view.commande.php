@@ -38,3 +38,13 @@ function afficherConfirmationCommande($reference, $montant) {
     echo "\n[OK] Commande #" . $reference . " enregistree - Statut : EN_ATTENTE\n";
     echo "Montant total : " . number_format($montant, 0, ',', ' ') . " FCFA\n";
 }
+function afficherListeCommandesPayees($listeCommandes) {
+    echo "\n--- Commandes payees ---\n";
+    if (empty($listeCommandes)) {
+        echo "Aucune commande payee.\n";
+        return;
+    }
+    foreach ($listeCommandes as $commande) {
+        echo $commande['id'] . ". Commande #" . $commande['id'] . " - " . number_format($commande['montant'], 0, ',', ' ') . " FCFA\n";
+    }
+}

@@ -11,3 +11,6 @@ function saveCommande($donnees) {
 
     return ['reference' => $reference, 'montant' => $montant];
 }
+function getCommandesPayees() {
+    return findByEtat(STATUT_PAYEE);
+}
