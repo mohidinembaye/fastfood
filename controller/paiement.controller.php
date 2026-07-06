@@ -10,5 +10,11 @@ function traiterPayerCommande() {
         return;
     }
 
-   
+    $reponse = payerCommande($saisie['idCommande'], $saisie['infosCB']);
+
+    if ($reponse['statut'] === 'KO') {
+        afficherErreurPaiement();
+        return;
+    }
+
 }

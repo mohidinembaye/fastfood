@@ -12,6 +12,6 @@ function choisirCommandeAPayer() {
     ];
 }
 
-function afficherErreursPaiement($errors) {
-    echo "\n[ERREUR] " . implode(" - ", (array) $errors) . "\n";
+function afficherErreurPaiement() {
+    echo "\n[ERREUR BANCAIRE] Transaction refusee par la banque\n";
 }

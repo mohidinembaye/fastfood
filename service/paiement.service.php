@@ -7,10 +7,14 @@ function demanderPaiement($infosCB, $montant) {
     return "ACCEPTEE";
 }
 
+
 function payerCommande($idCommande, $infosCB) {
     $montant = getMontant($idCommande);
-
     $reponseBanque = demanderPaiement($infosCB, $montant);
 
-    return $reponseBanque;
+    if ($reponseBanque === "REFUSEE") {
+        return ['statut' => 'KO'];
+    }
+
+    return ['statut' => 'OK', 'montant' => $montant];
 }
