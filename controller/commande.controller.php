@@ -11,5 +11,6 @@ function traiterSaveCommande() {
         return;
     }
 
-    
+    $commandeEnregistree = saveCommande($donnees);
+    afficherConfirmationCommande($commandeEnregistree['reference'], $commandeEnregistree['montant']);
 }

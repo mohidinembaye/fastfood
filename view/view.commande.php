@@ -34,3 +34,7 @@ function afficherErreurs($errors) {
         echo implode(" - ", (array) $errors) . "\n";
     }
 }
+function afficherConfirmationCommande($reference, $montant) {
+    echo "\n[OK] Commande #" . $reference . " enregistree - Statut : EN_ATTENTE\n";
+    echo "Montant total : " . number_format($montant, 0, ',', ' ') . " FCFA\n";
+}
