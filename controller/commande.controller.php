@@ -18,4 +18,5 @@ function traiterValiderCommande() {
         return;
     }
 
+    validerCommande($idCommande);
 }

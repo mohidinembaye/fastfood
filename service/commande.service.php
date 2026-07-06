@@ -14,3 +14,8 @@ function saveCommande($donnees) {
 function getCommandesPayees() {
     return findByEtat(STATUT_PAYEE);
 }
+function validerCommande($idCommande) {
+    modifierEtat($idCommande, STATUT_EN_PREPARATION);
+
+    return "ok";
+}
