@@ -26,3 +26,7 @@ function stockDisponible($idProduit, $quantite) {
     }
     return $produit['stock'] >= $quantite;
 }
+function getPrix($idProduit) {
+    $produit = obtenirProduitParId($idProduit);
+    return $produit !== null ? $produit['prix'] : 0;
+}
