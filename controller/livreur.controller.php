@@ -10,5 +10,9 @@ function traiterAssignerLivreur() {
         return;
     }
 
+    $listeLivreurs = getLivreursDisponibles();
+    afficherLivreurs($listeLivreurs);
+
+   
     return $idCommande;
 }
