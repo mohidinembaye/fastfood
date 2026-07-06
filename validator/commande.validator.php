@@ -1,30 +1,17 @@
 <?php
 
-function validateCommande($donnees) {
-    $errors = [];
-
-    if (empty($donnees['idClient'])) {
-        $errors[] = "L'identifiant client est obligatoire";
-    }
-    if (empty($donnees['listeProduits'])) {
-        $errors[] = "La liste des produits est obligatoire";
+function validateValidationCommande($idCommande) {
+    if (empty($idCommande)) {
+        return ["L'identifiant de commande est obligatoire"];
     }
 
-    if (!empty($errors)) {
-        return $errors;
+    if (!existsCommande($idCommande)) {
+        return ["commande" => "Cette commande n'existe pas"];
     }
 
-    if (!existsClient($donnees['idClient'])) {
-        return ["client" => "Ce client n'existe pas"];
-    }
-
-    foreach ($donnees['listeProduits'] as $ligne) {
-        if (!existsProduit($ligne['idProduit'])) {
-            return ["produit" => "Le produit #" . $ligne['idProduit'] . " n'existe pas"];
-        }
-        if (!stockDisponible($ligne['idProduit'], $ligne['quantite'])) {
-            return ["stock" => "Stock insuffisant pour le produit #" . $ligne['idProduit']];
-        }
+    $etat = verifierEtat($idCommande);
+    if ($etat !== STATUT_PAYEE) {
+        return ["etat" => "Cette commande n'est pas au statut PAYEE (statut actuel : " . $etat . ")"];
     }
 
     return "ok";

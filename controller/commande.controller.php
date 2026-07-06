@@ -1,21 +1,21 @@
 <?php
 
 
-function traiterSaveCommande() {
-    echo "\n=== Passer une commande ===\n";
-    $donnees = saisirCommande();
+function traiterValiderCommande() {
+    traiterListerCommandesPayees();
 
-    $resultat = validateCommande($donnees);
+    $idCommande = (int) lireEntree("Identifiant de la commande a valider : ");
+    $confirmation = lireEntree("Confirmez le lancement de la preparation (O/N) : ");
+
+    if (strtoupper($confirmation) !== 'O') {
+        echo "[OK] Validation annulee\n";
+        return;
+    }
+
+    $resultat = validateValidationCommande($idCommande);
     if ($resultat !== "ok") {
         afficherErreurs($resultat);
         return;
     }
 
-    $commandeEnregistree = saveCommande($donnees);
-    afficherConfirmationCommande($commandeEnregistree['reference'], $commandeEnregistree['montant']);
-}
-function traiterListerCommandesPayees() {
-    $liste = getCommandesPayees();
-    afficherListeCommandesPayees($liste);
-    return $liste;
 }
