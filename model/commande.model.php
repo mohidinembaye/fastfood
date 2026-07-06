@@ -38,3 +38,7 @@ function verifierEtat($idCommande) {
     $commande = obtenirCommandeParId($idCommande);
     return $commande !== null ? $commande['statut'] : null;
 }
+function getMontant($idCommande) {
+    $commande = obtenirCommandeParId($idCommande);
+    return $commande !== null ? $commande['montant'] : 0;
+}
