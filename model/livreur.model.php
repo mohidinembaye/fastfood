@@ -33,3 +33,17 @@ function verifierDisponibilite($idLivreur) {
     $livreur = obtenirLivreurParId($idLivreur);
     return $livreur !== null ? $livreur['statut'] : null;
 }
+function modifierEtatLivreur($idLivreur, $nouveauStatut) {
+    global $livreurs;
+    foreach ($livreurs as &$livreur) {
+        if ($livreur['id'] === $idLivreur) {
+            $livreur['statut'] = $nouveauStatut;
+            return "ok";
+        }
+    }
+    return "Livreur introuvable";
+}
+
+function notifierLivreur($idLivreur, $idCommande) {
+    return enregistrerNotification($idLivreur, "Vous etes assigne a la commande #" . $idCommande, "LIVRAISON");
+}

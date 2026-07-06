@@ -9,3 +9,6 @@ function afficherLivreurs($listeLivreurs) {
         echo $livreur['id'] . ". " . $livreur['nom'] . " - DISPONIBLE\n";
     }
 }
+function afficherConfirmationAssignation() {
+    echo "\n[OK] Livreur assigne - Commande : EN_LIVRAISON - Livreur : OCCUPE - Notification envoyee\n";
+}

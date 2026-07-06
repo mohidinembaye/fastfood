@@ -21,5 +21,6 @@ function traiterAssignerLivreur() {
         return;
     }
 
-    return ['idCommande' => $idCommande, 'idLivreur' => $idLivreur];
+    assignerLivreur($idCommande, $idLivreur);
+    afficherConfirmationAssignation();
 }

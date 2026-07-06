@@ -55,3 +55,13 @@ function modifierEtat($idCommande, $nouvelEtat) {
 function marquerPrete($idCommande) {
     return modifierEtat($idCommande, STATUT_PRETE);
 }
+function affecterLivreur($idCommande, $idLivreur) {
+    global $commandes;
+    foreach ($commandes as &$commande) {
+        if ($commande['id'] === $idCommande) {
+            $commande['livreurId'] = $idLivreur;
+            return "ok";
+        }
+    }
+    return "Commande introuvable";
+}
