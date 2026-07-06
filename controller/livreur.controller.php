@@ -13,6 +13,13 @@ function traiterAssignerLivreur() {
     $listeLivreurs = getLivreursDisponibles();
     afficherLivreurs($listeLivreurs);
 
-   
-    return $idCommande;
+    $idLivreur = (int) lireEntree("Identifiant du livreur a assigner : ");
+
+    $resultat = validateLivreur($idLivreur);
+    if ($resultat !== "ok") {
+        afficherErreursLivraison($resultat);
+        return;
+    }
+
+    return ['idCommande' => $idCommande, 'idLivreur' => $idLivreur];
 }

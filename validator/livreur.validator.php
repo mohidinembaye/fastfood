@@ -13,3 +13,16 @@ function validateAssignation($idCommande) {
     }
     return "ok";
 }
+function validateLivreur($idLivreur) {
+    if (empty($idLivreur)) {
+        return ["L'identifiant du livreur est obligatoire"];
+    }
+    if (!existsLivreur($idLivreur)) {
+        return ["livreur" => "Ce livreur n'existe pas"];
+    }
+    $statut = verifierDisponibilite($idLivreur);
+    if ($statut !== 'DISPONIBLE') {
+        return ["disponibilite" => "Ce livreur n'est pas disponible actuellement (statut : " . $statut . ")"];
+    }
+    return "ok";
+}
