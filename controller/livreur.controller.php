@@ -1,0 +1,14 @@
+<?php
+
+function traiterAssignerLivreur() {
+    echo "\n=== Assigner un livreur ===\n";
+    $idCommande = (int) lireEntree("Identifiant de la commande a expedier : ");
+
+    $resultat = validateAssignation($idCommande);
+    if ($resultat !== "ok") {
+        afficherErreursLivraison($resultat);
+        return;
+    }
+
+    return $idCommande;
+}

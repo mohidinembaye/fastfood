@@ -52,3 +52,6 @@ function modifierEtat($idCommande, $nouvelEtat) {
     }
     return "Commande introuvable";
 }
+function marquerPrete($idCommande) {
+    return modifierEtat($idCommande, STATUT_PRETE);
+}
