@@ -1,0 +1,17 @@
+<?php
+
+function choisirCommandeAPayer() {
+    $idCommande = (int) lireEntree("Identifiant de la commande a payer : ");
+    $numeroCarte = lireEntree("Numero de carte : ");
+    $dateExpiration = lireEntree("Date d'expiration (MM/AA) : ");
+    $cvv = lireEntree("CVV : ");
+
+    return [
+        'idCommande' => $idCommande,
+        'infosCB' => ['numeroCarte' => $numeroCarte, 'dateExpiration' => $dateExpiration, 'cvv' => $cvv]
+    ];
+}
+
+function afficherErreursPaiement($errors) {
+    echo "\n[ERREUR] " . implode(" - ", (array) $errors) . "\n";
+}

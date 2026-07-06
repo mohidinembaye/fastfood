@@ -20,3 +20,21 @@ function insertCommande($donnees, $montant) {
     $commandes[] = $commande;
     return $commande['id'];
 }
+function obtenirCommandeParId($idCommande) {
+    global $commandes;
+    foreach ($commandes as $commande) {
+        if ($commande['id'] === $idCommande) {
+            return $commande;
+        }
+    }
+    return null;
+}
+
+function existsCommande($idCommande) {
+    return obtenirCommandeParId($idCommande) !== null;
+}
+
+function verifierEtat($idCommande) {
+    $commande = obtenirCommandeParId($idCommande);
+    return $commande !== null ? $commande['statut'] : null;
+}
