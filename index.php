@@ -1,16 +1,27 @@
 <?php
-
 require_once 'utils/utils.php';
+
 require_once 'model/produit.model.php';
 require_once 'model/client.model.php';
 require_once 'model/commande.model.php';
+require_once 'model/paiement.model.php';
+require_once 'model/livreur.model.php';
+
 require_once 'validator/commande.validator.php';
-require_once 'validator/paiement.validator.php';     
+require_once 'validator/paiement.validator.php';
+require_once 'validator/livreur.validator.php';
+
 require_once 'service/commande.service.php';
+require_once 'service/paiement.service.php';
+require_once 'service/livreur.service.php';
+
 require_once 'view/view.commande.php';
-require_once 'view/view.paiement.php';               
+require_once 'view/view.paiement.php';
+require_once 'view/view.livreur.php';
+
 require_once 'controller/commande.controller.php';
-require_once 'controller/paiement.controller.php';    
+require_once 'controller/paiement.controller.php';
+require_once 'controller/livreur.controller.php';   
 
 function afficherMenuPrincipal() {
     echo "\n===== FASTFOOD =====\n";

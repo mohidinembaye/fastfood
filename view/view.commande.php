@@ -26,3 +26,11 @@ function saisirCommande() {
 
     return ['idClient' => $idClient, 'listeProduits' => $lignes];
 }
+function afficherErreurs($errors) {
+    echo "\n[ERREUR] ";
+    if (is_array($errors) && isset($errors[0]) === false) {
+        echo implode(" - ", $errors) . "\n";
+    } else {
+        echo implode(" - ", (array) $errors) . "\n";
+    }
+}
