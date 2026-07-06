@@ -20,3 +20,35 @@ function insertCommande($donnees, $montant) {
     $commandes[] = $commande;
     return $commande['id'];
 }
+function obtenirCommandeParId($idCommande) {
+    global $commandes;
+    foreach ($commandes as $commande) {
+        if ($commande['id'] === $idCommande) {
+            return $commande;
+        }
+    }
+    return null;
+}
+
+function existsCommande($idCommande) {
+    return obtenirCommandeParId($idCommande) !== null;
+}
+
+function verifierEtat($idCommande) {
+    $commande = obtenirCommandeParId($idCommande);
+    return $commande !== null ? $commande['statut'] : null;
+}
+function getMontant($idCommande) {
+    $commande = obtenirCommandeParId($idCommande);
+    return $commande !== null ? $commande['montant'] : 0;
+}
+function modifierEtat($idCommande, $nouvelEtat) {
+    global $commandes;
+    foreach ($commandes as &$commande) {
+        if ($commande['id'] === $idCommande) {
+            $commande['statut'] = $nouvelEtat;
+            return "ok";
+        }
+    }
+    return "Commande introuvable";
+}
