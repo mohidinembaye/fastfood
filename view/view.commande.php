@@ -48,3 +48,6 @@ function afficherListeCommandesPayees($listeCommandes) {
         echo $commande['id'] . ". Commande #" . $commande['id'] . " - " . number_format($commande['montant'], 0, ',', ' ') . " FCFA\n";
     }
 }
+function afficherConfirmationValidation() {
+    echo "\n[OK] Commande validee - Statut : EN_PREPARATION - Client notifie\n";
+}

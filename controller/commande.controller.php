@@ -1,6 +1,5 @@
 <?php
 
-
 function traiterValiderCommande() {
     traiterListerCommandesPayees();
 
@@ -19,4 +18,5 @@ function traiterValiderCommande() {
     }
 
     validerCommande($idCommande);
+    afficherConfirmationValidation();
 }

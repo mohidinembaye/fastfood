@@ -1,6 +1,8 @@
 <?php
 
 $commandes = [];
+$notifications = [];
+
 
 const STATUT_EN_ATTENTE = "EN_ATTENTE";
 const STATUT_PAYEE = "PAYEE";
@@ -61,4 +63,16 @@ function findByEtat($etat) {
         }
     }
     return $resultats;
+}
+
+function enregistrerNotification($idDestinataire, $message, $type) {
+    global $notifications;
+    $notification = [
+        'id' => genererId($notifications),
+        'destinataire' => $idDestinataire,
+        'message' => $message,
+        'type' => $type,
+    ];
+    $notifications[] = $notification;
+    return $notification['id'];
 }

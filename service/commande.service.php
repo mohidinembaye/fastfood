@@ -17,5 +17,11 @@ function getCommandesPayees() {
 function validerCommande($idCommande) {
     modifierEtat($idCommande, STATUT_EN_PREPARATION);
 
+    $client = getClientCommande($idCommande);
+
+    if ($client !== null) {
+        enregistrerNotification($client['id'], "Votre commande #" . $idCommande . " est en preparation", "COMMANDE");
+    }
+
     return "ok";
 }

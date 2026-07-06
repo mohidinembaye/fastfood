@@ -13,3 +13,16 @@ function existsClient($idClient) {
     }
     return false;
 }
+function getClientCommande($idCommande) {
+    global $clients;
+    $commande = obtenirCommandeParId($idCommande);
+    if ($commande === null) {
+        return null;
+    }
+    foreach ($clients as $client) {
+        if ($client['id'] === $commande['clientId']) {
+            return $client;
+        }
+    }
+    return null;
+}
