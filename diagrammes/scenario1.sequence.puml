@@ -1,0 +1,121 @@
+@startuml
+title Scénario 1 : Passer une Commande
+
+autonumber
+
+actor Client
+
+boundary "CommandeView" as View
+control "CommandeController" as Controller
+control "CommandeValidator" as Validator
+control "CommandeService" as Service
+entity "ClientModel" as ClientModel
+entity "ProduitModel" as ProduitModel
+entity "CommandeModel" as CommandeModel
+
+Client -> View : Ouvrir le formulaire
+View --> Client : Afficher menu des plats
+
+Client -> View : Saisir la commande\n(idClient, listeProduits, quantités)
+
+View -> Controller : saveCommande(données)
+
+Controller -> Validator : validateCommande(données)
+
+activate Validator
+
+Validator -> Validator : required(idClient)
+Validator -> Validator : required(listeProduits)
+
+alt Champs obligatoires absents
+
+Validator --> Controller : errors[]
+deactivate Validator
+
+Controller -> View : afficherErreurs(errors)
+
+else Données valides
+
+Validator -> ClientModel : existsClient(idClient)
+
+alt Client inexistant
+
+ClientModel --> Validator : false
+
+Validator --> Controller : errors["client"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Client existant
+
+ClientModel --> Validator : true
+
+loop Pour chaque produit
+
+Validator -> ProduitModel : existsProduit(idProduit)
+
+alt Produit inexistant
+
+ProduitModel --> Validator : false
+
+Validator --> Controller : errors["produit"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Produit trouvé
+
+ProduitModel --> Validator : Produit
+
+Validator -> ProduitModel : stockDisponible(idProduit,quantité)
+
+alt Stock insuffisant
+
+ProduitModel --> Validator : false
+
+Validator --> Controller : errors["stock"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Stock disponible
+
+ProduitModel --> Validator : true
+
+end
+
+end
+
+end
+
+Validator --> Controller : Validation OK
+
+deactivate Validator
+
+Controller -> Service : saveCommande(données)
+
+activate Service
+
+loop Calcul du montant
+
+Service -> ProduitModel : getPrix(idProduit)
+
+ProduitModel --> Service : prix
+
+Service -> Service : montant += prix * quantité
+
+end
+
+Service -> CommandeModel : insertCommande()
+
+CommandeModel --> Service : référenceCommande
+
+Service --> Controller : Commande enregistrée\nStatut = EN_ATTENTE
+
+deactivate Service
+
+Controller -> View : afficherConfirmation(référence,montant)
+
+View --> Client : Commande enregistrée
+
+end
+
+@enduml

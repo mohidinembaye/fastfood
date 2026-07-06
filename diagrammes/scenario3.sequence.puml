@@ -1,0 +1,111 @@
+@startuml
+title Scénario 3 : Valider une Commande Entrante
+
+autonumber
+
+actor "Gérant" as Gerant
+
+boundary "CommandeView" as View
+control "CommandeController" as Controller
+control "CommandeValidator" as Validator
+control "CommandeService" as Service
+
+entity "CommandeModel" as CommandeModel
+entity "ClientModel" as ClientModel
+entity "NotificationModel" as NotificationModel
+
+Gerant -> View : Consulter les commandes payées
+
+View -> Controller : listerCommandesPayees()
+
+Controller -> Service : getCommandesPayees()
+
+Service -> CommandeModel : findByEtat(PAYEE)
+
+CommandeModel --> Service : ListeCommandes
+
+Service --> Controller : ListeCommandes
+
+Controller --> View : afficherListe()
+
+Gerant -> View : Sélectionner une commande
+
+View -> Controller : validerCommande(idCommande)
+
+Controller -> Validator : validateValidationCommande(idCommande)
+
+activate Validator
+
+Validator -> Validator : required(idCommande)
+
+alt Identifiant vide
+
+Validator --> Controller : errors[]
+
+Controller -> View : afficherErreurs(errors)
+
+else Identifiant valide
+
+Validator -> CommandeModel : existsCommande(idCommande)
+
+alt Commande inexistante
+
+CommandeModel --> Validator : false
+
+Validator --> Controller : errors["commande"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Commande trouvée
+
+CommandeModel --> Validator : Commande
+
+Validator -> CommandeModel : verifierEtat(idCommande)
+
+alt Etat différent de PAYEE
+
+CommandeModel --> Validator : Etat invalide
+
+Validator --> Controller : errors["etat"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Etat = PAYEE
+
+CommandeModel --> Validator : OK
+
+Validator --> Controller : Validation OK
+
+end
+
+end
+
+end
+
+deactivate Validator
+
+Controller -> Service : validerCommande(idCommande)
+
+activate Service
+
+Service -> CommandeModel : modifierEtat(EN_PREPARATION)
+
+CommandeModel --> Service : OK
+
+Service -> ClientModel : getClientCommande(idCommande)
+
+ClientModel --> Service : Client
+
+Service -> NotificationModel : enregistrerNotification()
+
+NotificationModel --> Service : Notification créée
+
+Service --> Controller : Succès
+
+deactivate Service
+
+Controller -> View : afficherConfirmation()
+
+View --> Gerant : Commande validée
+
+@enduml

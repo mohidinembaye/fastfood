@@ -1,0 +1,115 @@
+@startuml
+title Scénario 2 : Payer une Commande en ligne
+
+autonumber
+
+actor Client
+
+boundary "PaiementView" as View
+control "PaiementController" as Controller
+control "PaiementValidator" as Validator
+control "PaiementService" as Service
+entity "CommandeModel" as CommandeModel
+entity "PaiementModel" as PaiementModel
+participant "Système Bancaire" as Banque
+
+Client -> View : Choisir une commande à payer
+
+View -> Controller : payerCommande(idCommande, infosCB)
+
+Controller -> Validator : validatePaiement(idCommande,infosCB)
+
+activate Validator
+
+Validator -> Validator : required(idCommande)
+Validator -> Validator : required(numeroCarte)
+Validator -> Validator : required(dateExpiration)
+Validator -> Validator : required(CVV)
+
+alt Champs obligatoires manquants
+
+Validator --> Controller : errors[]
+
+Controller -> View : afficherErreurs(errors)
+
+else Champs valides
+
+Validator -> CommandeModel : existsCommande(idCommande)
+
+alt Commande inexistante
+
+CommandeModel --> Validator : false
+
+Validator --> Controller : errors["commande"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Commande trouvée
+
+CommandeModel --> Validator : Commande
+
+Validator -> CommandeModel : verifierEtat(idCommande)
+
+alt Commande déjà payée
+
+CommandeModel --> Validator : PAYEE
+
+Validator --> Controller : errors["etat"]
+
+Controller -> View : afficherErreurs(errors)
+
+else Commande en attente
+
+CommandeModel --> Validator : EN_ATTENTE
+
+Validator --> Controller : Validation OK
+
+end
+
+end
+
+end
+
+deactivate Validator
+
+Controller -> Service : payerCommande()
+
+activate Service
+
+Service -> CommandeModel : getMontant(idCommande)
+
+CommandeModel --> Service : montant
+
+Service -> Banque : demanderPaiement(infosCB,montant)
+
+alt Paiement refusé
+
+Banque --> Service : Transaction refusée
+
+Service --> Controller : paiement KO
+
+Controller -> View : afficherErreurPaiement()
+
+else Paiement accepté
+
+Banque --> Service : Transaction acceptée
+
+Service -> PaiementModel : enregistrerPaiement()
+
+PaiementModel --> Service : référencePaiement
+
+Service -> CommandeModel : modifierEtat(PAYEE)
+
+CommandeModel --> Service : OK
+
+Service --> Controller : paiement OK
+
+Controller -> View : afficherReçu()
+
+View --> Client : Paiement effectué\nCommande PAYEE
+
+end
+
+deactivate Service
+
+@enduml
