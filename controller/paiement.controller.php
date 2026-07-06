@@ -17,4 +17,5 @@ function traiterPayerCommande() {
         return;
     }
 
+    afficherRecu($saisie['idCommande'], $reponse['montant']);
 }

@@ -16,5 +16,8 @@ function payerCommande($idCommande, $infosCB) {
         return ['statut' => 'KO'];
     }
 
-    return ['statut' => 'OK', 'montant' => $montant];
+    $referencePaiement = enregistrerPaiement($idCommande, $montant);
+    modifierEtat($idCommande, STATUT_PAYEE);
+
+    return ['statut' => 'OK', 'montant' => $montant, 'referencePaiement' => $referencePaiement];
 }

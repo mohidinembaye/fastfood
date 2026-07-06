@@ -42,3 +42,13 @@ function getMontant($idCommande) {
     $commande = obtenirCommandeParId($idCommande);
     return $commande !== null ? $commande['montant'] : 0;
 }
+function modifierEtat($idCommande, $nouvelEtat) {
+    global $commandes;
+    foreach ($commandes as &$commande) {
+        if ($commande['id'] === $idCommande) {
+            $commande['statut'] = $nouvelEtat;
+            return "ok";
+        }
+    }
+    return "Commande introuvable";
+}
